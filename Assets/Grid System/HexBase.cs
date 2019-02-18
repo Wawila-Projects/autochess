@@ -5,8 +5,8 @@ public abstract class HexBase<T> : IEquatable<HexBase<T>> where T: IEquatable<T>
     public readonly T Q, R, S;
 
     public T X => Q;
-    public T Y => S;
-    public T Z => R;
+    public T Y => R;
+    public T Z => S;
 
     public HexBase(T q, T r, T s) 
     {
@@ -22,7 +22,7 @@ public abstract class HexBase<T> : IEquatable<HexBase<T>> where T: IEquatable<T>
 
     public bool Equals(HexBase<T> other)
     {
-        if (other == null) return false;
+        if (other is null) return false;
         return Q.Equals(other.Q) && R.Equals(other.R) && S.Equals(other.S);
     }
 

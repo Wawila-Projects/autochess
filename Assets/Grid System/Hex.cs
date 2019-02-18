@@ -1,19 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
+
 public class Hex : HexBase<int>
 {
     public readonly int Length;
     public readonly List<Hex> Neighbors;
     public readonly List<Hex> DiagonalNeighbors;
 
-    public Hex(int q, int r, int s) : base(q, r, s)
+    public Hex(int q, int r, int s, bool forTile = false) : base(q, r, s)
     {
+        if (!forTile) return;
+
         Length = GetLength(this);
         Neighbors = GetNeighbors(this);
         DiagonalNeighbors = GetDiagonalNeighbors(this);
     }
 
-    public Hex(int q, int r): base(q, r, -q-r) { }
+    public Hex(int q, int r,bool forTile = false): this(q, r, -q-r, forTile) { }
 
     public int GetDistance(Hex other) 
     {
@@ -32,11 +35,13 @@ public class Hex : HexBase<int>
         return new Hex(-R, -S, -Q);
     } 
 
+    /// Distance from Center
     public static int GetLength(Hex hex) 
     {
         return (int)((Math.Abs(hex.Q) + Math.Abs(hex.R) + Math.Abs(hex.S))/2);
     }
     
+    /// Distance Between Two Hexes
     public static int GetDistance(Hex lhs, Hex rhs) 
     {
         return GetLength(lhs - rhs);
@@ -71,6 +76,11 @@ public class Hex : HexBase<int>
         }
         return neighbors;
     }  
+
+
+    public static implicit operator UnityEngine.Vector3 (Hex hex) {
+        return new UnityEngine.Vector3(hex.Q, hex.R, hex.S);
+    } 
 
     public override bool Equals(Object other)
     {   

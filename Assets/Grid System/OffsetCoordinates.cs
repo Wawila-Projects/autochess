@@ -1,7 +1,8 @@
+[System.Serializable]
 public struct OffsetCoordinates 
 {
-    public readonly int Column;
-    public readonly int Row;
+    public int Column;
+    public int Row;
 
     private OffsetCoordinates(int col, int row) 
     {

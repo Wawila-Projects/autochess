@@ -16,7 +16,7 @@ public struct Layout
     public Point HexToPixel(Hex hex) {
         var o = Orientation;
         var x = (o.f0 * hex.Q + o.f1 * hex.R) * Size.X;
-        var y = (o.f2 * hex.Q + o.f3 * hex.R) * Size.X;
+        var y = (o.f2 * hex.Q + o.f3 * hex.R) * Size.Y;
         return new Point(x + Origin.X, y + Origin.Y);
     }
 
