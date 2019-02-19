@@ -65,8 +65,8 @@ public class MapCoordinator: MonoBehaviour
 
             if(obstacles.Contains(hex)) {
                 prefab.GetComponent<Renderer>().material.SetColor("_Color", Color.green);
-                prefab.transform.localScale  = new Vector3(1,1,3);
-                var z = -0.125f + (prefab.transform.localScale.z - 2f) * -0.125f;
+                prefab.transform.localScale  = new Vector3(1,1,0.3f);
+                var z = (1-prefab.transform.localScale.z) * 0.125f;
                 prefab.transform.position += new Vector3(0,0,z);
                 tile.isObstacle = true;
             }
