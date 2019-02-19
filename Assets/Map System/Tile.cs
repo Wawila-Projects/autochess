@@ -1,14 +1,23 @@
 using UnityEngine;
 using UnityEditor;
+using System.Collections.Generic;
 
 public class Tile: MonoBehaviour
 {
     public Hex Hex;
+    public List<Tile> Neighbors;
+    public bool isObstacle;
     public GameObject Prefab;
     public int WorldX => _coordinates.Column;
     public int WorldY => _coordinates.Row;
     public OffsetCoordinates _coordinates;
     public Layout Layout;
+
+    public void Init(Hex hex) {
+        isObstacle =  tag == "Obstacle";
+        Hex = hex;
+        GetNeighbors();
+    }
 
     public void InitPointy(Hex hex, bool even = true) {
         Hex = hex;
@@ -28,7 +37,7 @@ public class Tile: MonoBehaviour
 
     public void InitFlat(Hex hex, bool even = true) {
         Hex = hex;
-        gameObject.transform.rotation = Quaternion.Euler(0,0,30);
+        //gameObject.transform.rotation = Quaternion.Euler(0,0,30);
         if (even) {
             _coordinates = OffsetCoordinates.EvenFlatOffset(hex);
         } else {
@@ -39,10 +48,19 @@ public class Tile: MonoBehaviour
         transform.position = new Vector3(x, 3f*WorldY/2f);
     }
 
+    public void GetNeighbors() {
+        Neighbors = new List<Tile>();
+        foreach(var hex in Hex.Neighbors) {
+            var go = GameObject.Find(hex.ToString());
+            if (go != null)
+                Neighbors.Add(go.GetComponent<Tile>());
+        }
+    }
+
     public void OnDrawGizmos() {
             if (Hex is null) return;
 
-            var text = $"({Hex.Q}, {Hex.R}, {Hex.S})";
+            var text = Hex.ToString();
             var style = new GUIStyle() {
                 fontSize = 8
             };

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
+[System.Serializable]
 public class Hex : HexBase<int>
 {
     public readonly int Length;
@@ -17,6 +18,10 @@ public class Hex : HexBase<int>
     }
 
     public Hex(int q, int r,bool forTile = false): this(q, r, -q-r, forTile) { }
+
+    public override string ToString() {
+        return $"Hex {Q}, {R}, {S}";
+    }
 
     public int GetDistance(Hex other) 
     {
@@ -76,7 +81,6 @@ public class Hex : HexBase<int>
         }
         return neighbors;
     }  
-
 
     public static implicit operator UnityEngine.Vector3 (Hex hex) {
         return new UnityEngine.Vector3(hex.Q, hex.R, hex.S);
