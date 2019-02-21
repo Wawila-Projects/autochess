@@ -1,3 +1,3 @@
-public enum Resistances {
+public enum Resistance {
     Armor, MagicArmor, PhysicalResistance, MagicalResistance
 }

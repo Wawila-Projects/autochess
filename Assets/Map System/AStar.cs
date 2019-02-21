@@ -8,9 +8,9 @@ using Priority_Queue;
     sin tener que buscar por los vecinos de cada Tile.
  */
 
-public class AStar
+public static class AStar
 {
-    public List<Tile> FindPath(Tile start, Tile goal)
+    public static List<Tile> FindPath(Tile start, Tile goal)
     {
         var cameFrom = new Dictionary<Tile, Tile>();
         var costSoFar = new Dictionary<Tile, int>();

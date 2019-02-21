@@ -1,17 +1,19 @@
 using UnityEngine;
 using UnityEditor;
+using System;
 using System.Collections.Generic;
 
 public class Tile: MonoBehaviour
 {
     public Hex Hex;
+    public Character Occupant;
     public List<Tile> Neighbors;
     public bool isObstacle;
     public GameObject Prefab;
     public int WorldX => _coordinates.Column;
     public int WorldY => _coordinates.Row;
-    public OffsetCoordinates _coordinates;
-    public Layout Layout;
+    public bool IsOccupied => Occupant != null;
+    private OffsetCoordinates _coordinates;
 
     public void Init(Hex hex) {
         isObstacle =  tag == "Obstacle";
@@ -55,6 +57,42 @@ public class Tile: MonoBehaviour
             if (go != null)
                 Neighbors.Add(go.GetComponent<Tile>());
         }
+    }
+
+    public int GetDistance(Tile other) {
+        return Hex.GetDistance(other.Hex);
+    }
+
+    public int GetDistance(Hex other) {
+        return Hex.GetDistance(other);
+    }
+
+    public List<Tile> GetTilesAtDistance(int distance) {
+        var tiles = new List<Tile>();
+        foreach (var tile in MapCoordinator.Coordinators.Map)
+        {   
+            if (tiles.Count == 6) break;
+            if (tile == this || tile.GetDistance(Hex) != distance) continue;
+            tiles.Add(tile);
+        }
+        return tiles;
+    }
+
+    public List<Tile> GetTilesInsideRange(int range) {
+        var tiles = new List<Tile>();
+        foreach (var tile in MapCoordinator.Coordinators.Map)
+        {   
+            if (tile == this) continue;
+            var checkX = Math.Abs(tile.Hex.X) <= range;
+            var checkY = Math.Abs(tile.Hex.Y) <= range;
+            var checkZ = Math.Abs(tile.Hex.Z) <= range;
+            var validHex = (tile.Hex.X + tile.Hex.Y + tile.Hex.Z) == 0;
+            if (checkX && checkY && checkZ && validHex) 
+            {
+                tiles.Add(tile);
+            }
+        }
+        return tiles;
     }
 
     public void OnDrawGizmos() {

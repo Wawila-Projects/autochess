@@ -12,6 +12,7 @@ public enum MapType
 
 public class MapCoordinator: MonoBehaviour 
 {
+    public static MapCoordinator Coordinators;
     public MapShapes Shape = MapShapes.Rectangular;
     public MapType Type = MapType.PointyEven;
 
@@ -24,6 +25,7 @@ public class MapCoordinator: MonoBehaviour
     public GameObject Prefab;
 
     void Awake() {
+        Coordinators = this;
         Map = new List<Tile>();
         var map = new HashSet<Hex>();
 
@@ -63,13 +65,12 @@ public class MapCoordinator: MonoBehaviour
             Map.Add(tile);
             prefab.transform.SetParent(transform);
 
-            if(obstacles.Contains(hex)) {
-                prefab.GetComponent<Renderer>().material.SetColor("_Color", Color.green);
-                prefab.transform.localScale  = new Vector3(1,1,0.3f);
-                var z = (1-prefab.transform.localScale.z) * 0.125f;
-                prefab.transform.position += new Vector3(0,0,z);
-                tile.isObstacle = true;
-            }
+            if(!obstacles.Contains(hex)) continue;
+            prefab.GetComponent<Renderer>().material.SetColor("_Color", Color.green);
+            prefab.transform.localScale  = new Vector3(1,1,0.3f);
+            var z = (1-prefab.transform.localScale.z) * 0.125f;
+            prefab.transform.position += new Vector3(0,0,z);
+            tile.isObstacle = true;
         }
 
         Map.ForEach((T) => T.GetNeighbors());
@@ -77,18 +78,18 @@ public class MapCoordinator: MonoBehaviour
         Start = Map.Find(T => T.name == new Hex(0,0,0).ToString());
         End = Map.Find(T => T.name == new Hex(2,4,-6).ToString());
 
+       
+
         transform.rotation = Quaternion.Euler(90,0,0);
     }
 
     void Update() 
     {
         if(!Input.GetKeyDown(KeyCode.Space)) return;
-
-        AStar pf = new AStar();
-        var path = pf.FindPath(Start, End);
-        foreach(var tile in path) {
-            tile.GetComponent<Renderer>()?.material.SetColor("_Color", Color.red);
-        }
+        // var path = AStar.FindPath(Start, End);
+        // foreach(var tile in path) {
+        //     tile.GetComponent<Renderer>()?.material.SetColor("_Color", Color.red);
+        // }
     }
 
 }

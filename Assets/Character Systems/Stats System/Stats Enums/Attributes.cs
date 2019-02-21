@@ -1,4 +1,4 @@
-public enum BaseAttributes 
+public enum Attribute
 {
     Strength, Agility, Intelligence
 }

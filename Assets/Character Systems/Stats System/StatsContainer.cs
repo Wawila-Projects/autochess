@@ -1,6 +1,7 @@
+using System;
 using System.Collections.Generic;
 
-public class StatsContainer<TKey, TValue> where TKey: System.Enum {
+public class StatsContainer<TKey, TValue> where TKey: Enum {
     protected IDictionary<TKey, TValue> Stats;
     protected IDictionary<TKey, TValue> Buffs;
 
@@ -78,14 +79,18 @@ public class StatsContainer<TKey, TValue> where TKey: System.Enum {
     }
     
     protected virtual TValue Add(TValue lhs, TValue rhs) {
-        dynamic left = lhs;
-        dynamic right = lhs;
-        return (TValue)(left+right);
+        if(lhs is int lhsi && rhs is int rhsi)
+            return (TValue)(object)(lhsi+rhsi);
+        if(lhs is double lhsd && rhs is double rhsd)
+            return (TValue)(object)(lhsd+rhsd);
+        return lhs;
     }
 
     protected virtual TValue Subtract(TValue lhs, TValue rhs) {
-        dynamic left = lhs;
-        dynamic right = lhs;
-        return (TValue)(left-right);
+       if(lhs is int lhsi && rhs is int rhsi)
+            return (TValue)(object)(lhsi-rhsi);
+        if(lhs is double lhsd && rhs is double rhsd)
+            return (TValue)(object)(lhsd-rhsd);
+        return lhs;
     }
 }
