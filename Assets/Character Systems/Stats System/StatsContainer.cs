@@ -16,8 +16,10 @@ public class StatsContainer<TKey, TValue> where TKey: Enum {
 
         Buffs = new Dictionary<TKey, TValue>();
         foreach(TKey key in System.Enum.GetValues(typeof(TKey)) ) {
-            Stats[key] = default(TValue);
             Buffs[key] = default(TValue);
+            if (Stats[key] == null) {
+                Stats[key] = default(TValue);
+            } 
         }
     }
 

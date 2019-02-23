@@ -61,8 +61,8 @@ public class TargetingHandler
     private Character TargetAttacker() => _opponents.Find((C) => C.Target == _parent) ?? _opponents.RandomElement();
     private Character TargetFarthest() => _opponents.OrderBy((O) => O.Location.GetDistance(_parent.Location)).First();
     private Character TargetClosest() =>  _opponents.OrderByDescending((O) => O.Location.GetDistance(_parent.Location)).First();
-    private Character TargetLeastHealth() => _opponents.OrderBy((O) => O.Traits[Trait.Health]).First();
-    private Character TargetMaxHealth() => _opponents.OrderByDescending((O) => O.Traits[Trait.Health]).First();    
-    private Character TargetLeastHealthStatic() => _opponents.OrderBy((O) => O.Traits[Trait.MaxHealth]).First();
-    private Character TargetMaxHealthStatic() => _opponents.OrderByDescending((O) => O.Traits[Trait.MaxHealth]).First();    
+    private Character TargetLeastHealth() => _opponents.OrderBy((O) => O.Health).First();
+    private Character TargetMaxHealth() => _opponents.OrderByDescending((O) => O.Health).First();    
+    private Character TargetLeastHealthStatic() => _opponents.OrderBy((O) => O.Traits[Trait.Health]).First();
+    private Character TargetMaxHealthStatic() => _opponents.OrderByDescending((O) => O.Traits[Trait.Health]).First();    
 }
