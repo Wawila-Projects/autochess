@@ -12,12 +12,10 @@ public enum MapType
 
 public class MapCoordinator: MonoBehaviour 
 {
-    public static MapCoordinator Coordinators;
+    public static MapCoordinator Coordinator;
     public MapShapes Shape = MapShapes.Rectangular;
     public MapType Type = MapType.PointyEven;
-
-    public Tile Start;
-    public Tile End;
+    public bool DoneShowing = false;
 
     public List<Tile> Map;
     public int Width;
@@ -25,7 +23,6 @@ public class MapCoordinator: MonoBehaviour
     public GameObject Prefab;
 
     void Awake() {
-        Coordinators = this;
         Map = new List<Tile>();
         var map = new HashSet<Hex>();
 
@@ -45,8 +42,8 @@ public class MapCoordinator: MonoBehaviour
         }
 
         var obstacles = new List<Hex>() {
-            new Hex(1, 0 ,-1), new Hex(1,1,-2), new Hex(0,3,-3), new Hex(1,4,-5),
-            new Hex(2,3,-5), new Hex(2,2,-4), new Hex(3,1,-4), new Hex(0,2,-2)
+            // new Hex(1, 0 ,-1), new Hex(1,1,-2), new Hex(0,3,-3), new Hex(1,4,-5),
+            // new Hex(2,3,-5), new Hex(2,2,-4), new Hex(3,1,-4), new Hex(0,2,-2)
         };
 
         foreach(var hex in map) {
@@ -74,15 +71,14 @@ public class MapCoordinator: MonoBehaviour
         }
 
         Map.ForEach((T) => T.GetNeighbors());
-
-        Start = Map.Find(T => T.name == new Hex(0,0,0).ToString());
-        End = Map.Find(T => T.name == new Hex(2,4,-6).ToString());
-
-       
-
         transform.rotation = Quaternion.Euler(90,0,0);
+        DoneShowing = true;
     }
 
+    void Start()
+    {
+        Coordinator = this;
+    }
     void Update() 
     {
         if(!Input.GetKeyDown(KeyCode.Space)) return;
