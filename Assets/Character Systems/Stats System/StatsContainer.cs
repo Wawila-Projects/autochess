@@ -17,7 +17,7 @@ public class StatsContainer<TKey, TValue> where TKey: Enum {
         Buffs = new Dictionary<TKey, TValue>();
         foreach(TKey key in System.Enum.GetValues(typeof(TKey)) ) {
             Buffs[key] = default(TValue);
-            if (Stats[key] == null) {
+            if (!Stats.ContainsKey(key)) {
                 Stats[key] = default(TValue);
             } 
         }
