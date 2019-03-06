@@ -1,22 +1,13 @@
 using System.Collections.Generic;
+using UnityEngine;
 
-public class GameCoordinator {
-    public static GameCoordinator Game => new GameCoordinator();
-    
-    public List<Player> Players;
-    public Dictionary<Player, Player> Opponents;
+public class GameCoordinator: MonoBehaviour {
+    public List<Player> Players = new List<Player>();
+    public Dictionary<Player, Player> Opponents = new Dictionary<Player, Player>();
     public List<GameMechanicBase> MechanicsController;
 
     void Start() 
     {
-        MechanicsController.ForEach((M) => M.Start());
+        MechanicsController?.ForEach((M) => M.Start());
     }
-
-    void Update() 
-    {
-
-    }
-
-
-    
 }

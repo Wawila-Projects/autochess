@@ -1,9 +1,13 @@
 public abstract class GameMechanicBase 
 {
-    protected GameCoordinator coordinator => GameCoordinator.Game;
+    protected GameCoordinator Game;
 
     protected GameMechanicBase() 
     {
+    }
+    protected GameMechanicBase(GameCoordinator coordinator) 
+    {
+        Game = coordinator;
         coordinator.MechanicsController.Add(this);
     }
 

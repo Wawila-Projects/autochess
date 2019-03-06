@@ -35,7 +35,7 @@ public class UnitStore: GameMechanicBase
 
     private void SetUnitsForSale() 
     {
-        var users = GameCoordinator.Game.Players
+        var users = Game.Players
                         .Where((P)=> !P.Defeated)
                         .Select((P) => P.GetHashCode());
 
