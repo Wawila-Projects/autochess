@@ -33,7 +33,7 @@ public static class AStar
             {
                 var next = tile.GetComponent<Tile>();
 
-                if(next == null || next.isObstacle) continue;
+                if(next == null || next.isObstacle || next.IsOccupied) continue;
 
                 var newCost = costSoFar[current] + 1;
 
@@ -52,8 +52,11 @@ public static class AStar
 
     private static float Heuristic(Tile a, Tile b)
     {
-        if(a.isObstacle || b.isObstacle)
+        if(a.isObstacle || b.isObstacle || 
+           a.IsOccupied || b.IsOccupied)
+        {
             return 1000f;
+        }
         return a.Hex.GetDistance(b.Hex);
     }
 
