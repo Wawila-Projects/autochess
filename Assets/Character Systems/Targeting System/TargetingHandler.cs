@@ -1,16 +1,21 @@
 using System.Linq;
 using System.Collections.Generic;
 
+[System.Serializable]
 public class TargetingHandler 
 {
     public TargetingPriorities Priority;
+    public Character Target;
     private Character _parent;
-    private List<Character> _opponents => GameCoordinator.Game.Opponents[_parent.Owner]
-                                                        .Team.FindAll((O) => !O.IsDead);
+    private List<Character> _opponents;
+    private GameCoordinator _game;
+    [UnityEngine.SerializeField]
+    private Character _prevTarget;
 
-    public TargetingHandler(Character parent) {
+    public TargetingHandler(Character parent, GameCoordinator game) {
         _parent = parent;
         Priority = TargetingPriorities.Random;
+        _game = game;
     }
 
     public Tile GetDestination(Character target) {
@@ -23,11 +28,19 @@ public class TargetingHandler
             return null;
         }
 
-        var tilesInRange = target.Location.GetTilesInsideRange(range)
-                    .FindAll((T) => !T.isObstacle && !T.IsOccupied );
+        if(targetTile == origin)
+        {
+            return null;
+        }
+
+        var tilesInRange = targetTile.GetTilesInsideRange(range);
+        tilesInRange = tilesInRange.FindAll((T) => !T.isObstacle && !T.IsOccupied);
 
         if (tilesInRange.Count == 0)
         {
+            _prevTarget = Target;
+            Target = null;
+            UnityEngine.Debug.Log($"{_parent.name} Changing Target");
             return origin;
         }
 
@@ -36,31 +49,53 @@ public class TargetingHandler
     }
 
     public Character GetTarget() {
+        if (Target != null && !Target.IsDead)
+        {
+            return Target;
+        }
+
+        // TODO: Remove prev target from options.
+        // TODO: Check if target is accessible 
+        _opponents = _game.Opponents[_parent.Owner]
+                                .Team.FindAll((O) => !O.IsDead && O != _prevTarget);
+
         switch (Priority)
         {
             case TargetingPriorities.Random:
-                return _opponents.RandomElement();
+                Target = _opponents.RandomElement();
+                break;
             case TargetingPriorities.Attacker:
-                return TargetAttacker();
+                Target =  TargetAttacker();
+                break;
             case TargetingPriorities.Closest:
-                return TargetClosest();
+                Target =  TargetClosest();
+                break;
             case TargetingPriorities.Farthest:
-                return TargetFarthest();
+                Target =  TargetFarthest();
+                break;
             case TargetingPriorities.MaxHealthDynamic:
-                return TargetMaxHealth();
+                Target =  TargetMaxHealth();
+                break;
             case TargetingPriorities.LeastHealthDynamic:
-                return TargetLeastHealth();
+                Target =  TargetLeastHealth();
+                break;
             case TargetingPriorities.MaxHealthStatic:
-                return TargetMaxHealthStatic();
+                Target =  TargetMaxHealthStatic();
+                break;
             case TargetingPriorities.LeastHealthStatic:
-                return TargetLeastHealthStatic();
+                Target =  TargetLeastHealthStatic();
+                break;
+            default:
+                Target = null;
+                break;
         }
-        return null;
+        return Target;
     }
 
     private Character TargetAttacker() => _opponents.Find((C) => C.Target == _parent) ?? _opponents.RandomElement();
-    private Character TargetFarthest() => _opponents.OrderBy((O) => O.Location.GetDistance(_parent.Location)).First();
-    private Character TargetClosest() =>  _opponents.OrderByDescending((O) => O.Location.GetDistance(_parent.Location)).First();
+    private Character TargetFarthest() => _opponents.OrderByDescending((O) => O.Location.GetDistance(_parent.Location)).First();
+    private Character TargetClosest() =>  _opponents.OrderBy((O) => O.Location.GetDistance(_parent.Location)).First();
+ 
     private Character TargetLeastHealth() => _opponents.OrderBy((O) => O.Health).First();
     private Character TargetMaxHealth() => _opponents.OrderByDescending((O) => O.Health).First();    
     private Character TargetLeastHealthStatic() => _opponents.OrderBy((O) => O.Traits[Trait.Health]).First();
