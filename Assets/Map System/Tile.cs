@@ -68,8 +68,13 @@ public class Tile: MonoBehaviour
     }
 
     public List<Tile> GetTilesAtDistance(int distance) {
+        if (distance == 1) 
+        {
+            return Neighbors;
+        }
+        
         var tiles = new List<Tile>();
-        foreach (var tile in MapCoordinator.Coordinators.Map)
+        foreach (var tile in MapCoordinator.Coordinator.Map)
         {   
             if (tiles.Count == 6) break;
             if (tile == this || tile.GetDistance(Hex) != distance) continue;
@@ -79,8 +84,13 @@ public class Tile: MonoBehaviour
     }
 
     public List<Tile> GetTilesInsideRange(int range) {
+        if (range == 1) 
+        {
+            return Neighbors;
+        }
+
         var tiles = new List<Tile>();
-        foreach (var tile in MapCoordinator.Coordinators.Map)
+        foreach (var tile in MapCoordinator.Coordinator.Map)
         {   
             if (tile == this) continue;
             var checkX = Math.Abs(tile.Hex.X) <= range;
@@ -96,13 +106,14 @@ public class Tile: MonoBehaviour
     }
 
     public void OnDrawGizmos() {
-            if (Hex is null) return;
+        return;
+        if (Hex is null) return;
 
-            var text = Hex.ToString();
-            var style = new GUIStyle() {
-                fontSize = 8
-            };
-            var position = transform.position;
-            Handles.Label(position, text, style);
-        }
+        var text = Hex.ToString();
+        var style = new GUIStyle() {
+            fontSize = 8
+        };
+        var position = transform.position;
+        Handles.Label(position, text, style);
+    }
 }
