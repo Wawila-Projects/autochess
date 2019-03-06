@@ -1,3 +1,4 @@
 public enum AttackModifier {
-    Bash, Cleave, CriticalStrike, Lifesteal, ManaBreak
+    Bash, Cleave, CriticalStrike, 
+    Lifesteal, ManaBreak, AttackSpeed
 }
