@@ -78,8 +78,6 @@ public static class AStar
 
         return path;
     }
-
-    
 }
 
 

@@ -46,13 +46,15 @@ public class Character: MonoBehaviour
      private IEnumerator Act() {
          while(!IsDead) {
             Target = _Targeter.GetTarget();
-            if (Target == null) continue;
-
+            if (Target == null) 
+            {
+                yield return null;
+                continue;
+            }
             Destination = GetPosition(Target);
             if(Destination != null) 
             {
                 Move(Destination);
-                //print($"{name} Moving to Target {Destination.name}");
                 yield return new WaitForSeconds(Traits[Trait.MovementSpeed]);
             }
             print($"{name} Attacking {Target.name}");
@@ -96,4 +98,4 @@ public class Character: MonoBehaviour
         var position = transform.position + new Vector3(0,0,5);
         Handles.Label(position, text, style);
     }
-}
+} 
