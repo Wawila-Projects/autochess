@@ -35,6 +35,18 @@ public class Character: MonoBehaviour
         _Map = map;
     }
 
+        
+    public void Revive(Tile location)
+    {
+        if (!IsDead) return;
+        IsDead = false;
+        Location = location;
+        Location.Occupant = this;
+        transform.position = location.transform.position;
+        GetComponent<Renderer>().enabled = true;
+        StartCoroutine(Act());
+    }
+
     IEnumerator Start() 
     {
             yield return new WaitUntil(() => { return !IsDead && 
@@ -62,6 +74,7 @@ public class Character: MonoBehaviour
          }
          Location.Occupant = null;
          Location = null;
+         GetComponent<Renderer>().enabled = false;
     }
 
     private Tile GetPosition(Character target) 
