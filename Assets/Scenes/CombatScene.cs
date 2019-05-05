@@ -42,18 +42,26 @@ public class CombatScene: MonoBehaviour
             {T1, T2}, {T2, T1}
         };
 
-        Dictionary<Trait, int> Traits = new Dictionary<Trait, int> {
-            {Trait.MovementSpeed, 1}, {Trait.AttackRange, 1}, {Trait.MovementRange, 1} 
+        Dictionary<Trait, float> Traits = new Dictionary<Trait, float> {
+            {Trait.MovementSpeed, 1}, {Trait.AttackRange, 1}, {Trait.MovementRange, 1},
+            {Trait.Health, 1000}
         }; 
+        Dictionary<Attribute, int> Attributes = new Dictionary<Attribute, int> {
+            {Attribute.Strength, 20} 
+        }; 
+        // TODO mamke it so this are percentages only
         Dictionary<AttackModifier, float> AttackModifers = new Dictionary<AttackModifier, float> {
-            {AttackModifier.AttackSpeed, 1}
+            {AttackModifier.AttackSpeed, 1}, {AttackModifier.Cleave, 10}, 
+            {AttackModifier.Armor, 5}, {AttackModifier.Lifesteal, 0}, 
+            {AttackModifier.Damage, 10}
         };
 
         for (var i = 0; i < T1.transform.childCount; i++)
         {
             var child = T1.transform.GetChild(i).GetComponent<Character>();
-            child.AttackModifers = new StatsContainer<AttackModifier, float>(AttackModifers);
-            child.Traits = new StatsContainer<Trait, int>(Traits);
+            child.AttackModifiers = new StatsContainer<AttackModifier, float>(AttackModifers);
+            child.Traits = new StatsContainer<Trait, float>(Traits);
+            child.Attributes = new StatsContainer<Attribute, int>(Attributes);
             var tile = Map.Map.Find((T) => T.Hex == new Hex(i, 0 , -i));
             child.Location = tile;
             tile.Occupant = child;
@@ -65,8 +73,9 @@ public class CombatScene: MonoBehaviour
         for (var i = 0; i < T2.transform.childCount; i++)
         {
             var child = T2.transform.GetChild(i).GetComponent<Character>();
-            child.AttackModifers = new StatsContainer<AttackModifier, float>(AttackModifers);
-            child.Traits = new StatsContainer<Trait, int>(Traits);
+            child.AttackModifiers = new StatsContainer<AttackModifier, float>(AttackModifers);
+            child.Traits = new StatsContainer<Trait, float>(Traits);
+            child.Attributes = new StatsContainer<Attribute, int>(Attributes);
             var tile =  Map.Map.Find((T) => T.Hex == new Hex(i, 5));
             child.Location = tile;
             tile.Occupant = child;

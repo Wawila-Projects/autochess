@@ -33,7 +33,7 @@ public class TargetingHandler
             return null;
         }
 
-        var tilesInRange = targetTile.GetTilesInsideRange(range);
+        var tilesInRange = targetTile.GetTilesInsideRange((int)range);
         tilesInRange = tilesInRange.FindAll((T) => !T.isObstacle && !T.IsOccupied);
 
         if (tilesInRange.Count == 0)

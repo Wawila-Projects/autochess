@@ -5,9 +5,12 @@ public class StatsContainer<TKey, TValue> where TKey: Enum {
     protected IDictionary<TKey, TValue> Stats;
     protected IDictionary<TKey, TValue> Buffs;
 
-    public StatsContainer(IDictionary<TKey, TValue> stats, IDictionary<TKey, TValue> buffs = null) 
+    protected bool IsPercentage;
+
+    public StatsContainer(IDictionary<TKey, TValue> stats, IDictionary<TKey, TValue> buffs = null, bool isPercentage = false) 
     {
         Stats = stats;
+        IsPercentage = isPercentage;
         if(buffs != null) 
         {
             Buffs = buffs;
@@ -23,8 +26,9 @@ public class StatsContainer<TKey, TValue> where TKey: Enum {
         }
     }
 
-    public StatsContainer()
+    public StatsContainer(bool isPercentage = false)
     {
+        IsPercentage = isPercentage;
         Stats = new Dictionary<TKey, TValue>();
         Buffs = new Dictionary<TKey, TValue>();
         foreach(TKey key in System.Enum.GetValues(typeof(TKey)) ) {
@@ -36,7 +40,9 @@ public class StatsContainer<TKey, TValue> where TKey: Enum {
     public TValue this[TKey key] => GetFinalStat(key);
 
     public virtual TValue GetFinalStat(TKey key) {
-        return Add(Stats[key], Buffs[key]);
+        var value = Add(Stats[key], Buffs[key]);
+        var percentage = Divide(value, IsPercentage ? 100 : 1);
+        return percentage;
     }
     public virtual TValue GetStat(TKey key) {
         return Stats[key];
@@ -93,6 +99,13 @@ public class StatsContainer<TKey, TValue> where TKey: Enum {
             return (TValue)(object)(lhsi-rhsi);
         if(lhs is double lhsd && rhs is double rhsd)
             return (TValue)(object)(lhsd-rhsd);
+        return lhs;
+    }
+    protected virtual TValue Divide(TValue lhs, int rhs) {
+       if(lhs is int lhsi)
+            return (TValue)(object)(lhsi/rhs);
+        if(lhs is double lhsd)
+            return (TValue)(object)(lhsd/rhs);
         return lhs;
     }
 }

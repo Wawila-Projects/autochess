@@ -105,15 +105,15 @@ public class Tile: MonoBehaviour
         return tiles;
     }
 
-    public void OnDrawGizmos() {
-        return;
-        if (Hex is null) return;
+    // public void OnDrawGizmos() {
+    //     return;
+    //     if (Hex is null) return;
 
-        var text = Hex.ToString();
-        var style = new GUIStyle() {
-            fontSize = 8
-        };
-        var position = transform.position;
-        Handles.Label(position, text, style);
-    }
+    //     var text = Hex.ToString();
+    //     var style = new GUIStyle() {
+    //         fontSize = 8
+    //     };
+    //     var position = transform.position;
+    //     Handles.Label(position, text, style);
+    // }
 }
